@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 app.get('/', function(req, res) {
-    res.send('Hello World! Checking Jenkins web-hook');
+    res.send('Hello World! Jenkins Web-Hook is Successful 😄');
 });
 
 var server = app.listen(3000, function () {
