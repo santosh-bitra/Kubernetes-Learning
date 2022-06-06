@@ -1,4 +1,4 @@
 - hosts: localhost
-  user: sbitra4
+  user: jenkins
   roles: 
     - deploy
