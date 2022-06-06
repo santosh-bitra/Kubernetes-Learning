@@ -1,0 +1,4 @@
+- hosts: localhost
+  user: sbitra4
+  roles: 
+    - deploy

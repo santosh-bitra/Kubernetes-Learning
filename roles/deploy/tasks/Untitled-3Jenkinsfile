@@ -1,0 +1,56 @@
+job('CI/CD Seed job')   {
+    description('This job is to re-create the node-js v1.2 job using jenkins dsl. 
+    The stages of this pipeline is noted in one-note.
+    This pipeline does the following.
+    1. Pulls git repo consisting of nodes app files whenever a commit has been made - WebHook
+    2. Should Create a docker image based on the newly committed index.js file for the nodes app
+    4. Pushes the image to docker hub with a tag
+    5. Pulls the image for k8s and deploys a container in K8s cluster')
+
+    environmentVariables(APP_NAME: 'DCUBE_APP', registry: 'santoshbitradocker/nodejs_demo', registryCredential: 'dockerhub_id', dockerImage: '')
+
+    parameters {
+        labelParam('agent', defaultValue = 'master')  
+    }
+
+    scm {
+        git('https://github.com/santosh-bitra/Kubernetes-Learning.git', 'main')
+    }
+
+    triggers {
+        githubPush()
+    }
+
+    stages {
+        stage('Cleanup Workspace') {
+            steps{
+                cleanWs()
+                sh """
+                echo "Cleaned Up Workspace for ${APP_NAME}"
+                """
+            }
+        }
+
+        stage('Docker Image Build') {
+            steps{
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+
+                }
+            }
+        }
+
+        stage('Push to dockerhub') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+            
+        }
+
+        stage('')
+    }
+}

@@ -1,0 +1,48 @@
+---
+# tasks file for deploy.yml
+
+
+#tasks:
+#- name: Deploy the service
+#  k8s:
+#    state: present
+#    definition: "{{ lookup('template', 'k8s/{{app_name}}/{{service_name}}/deployment.yml') | from_yaml }}"
+#    validate_certs: no
+#    namespace: default
+
+#- name: Create a Service object from an inline definition
+#  k8s:
+#    state: present
+#    definition:
+#      apiVersion: v1
+#      kind: Service
+#      metadata:
+#        name: web
+#        namespace: testing
+#        labels:
+#          app: galaxy
+#          service: web
+#      spec:
+#        selector:
+#          app: galaxy
+#          service: web
+#        ports:
+#        - protocol: TCP
+#          targetPort: 8000
+#          name: port-8000-tcp
+#          port: 8000
+
+
+
+- name: Create a pod by reading the definition from a local file
+  k8s:
+    state: present
+    namespace: default
+    src: /home/sbitra4/workspace/lab-1/k8s/k8s-learning/bitra-k8s/k8s-nodejs/nodejs-app-dir/roles/deploy/files/pod-helloworld.yml
+
+- name: Create a service by reading the definition from a local file
+  k8s:
+    state: present
+    namespace: default
+    src: /home/sbitra4/workspace/lab-1/k8s/k8s-learning/bitra-k8s/k8s-nodejs/nodejs-app-dir/roles/deploy/files/loadbalancer-2.yml
+
